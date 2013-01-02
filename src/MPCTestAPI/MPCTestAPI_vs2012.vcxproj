@@ -112,8 +112,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="MPCTestAPI.rc">
-    </ResourceCompile>
+    <ResourceCompile Include="MPCTestAPI.rc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\mpc-hc\MpcApi.h" />
