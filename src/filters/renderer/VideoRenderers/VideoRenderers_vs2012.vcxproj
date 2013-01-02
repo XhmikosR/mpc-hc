@@ -168,7 +168,7 @@
     <ClInclude Include="VMR9AllocatorPresenter.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\DSUtil\DSUtil.vcxproj">
+    <ProjectReference Include="..\..\..\DSUtil\DSUtil_vs2012.vcxproj">
       <Project>{fc70988b-1ae5-4381-866d-4f405e28ac42}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
