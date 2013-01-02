@@ -158,7 +158,7 @@
     <ClInclude Include="WinAPIUtils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\thirdparty\VirtualDub\Kasumi\Kasumi.vcxproj">
+    <ProjectReference Include="..\thirdparty\VirtualDub\Kasumi\Kasumi_vs2012.vcxproj">
       <Project>{0d252872-7542-4232-8d02-53f9182aee15}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
