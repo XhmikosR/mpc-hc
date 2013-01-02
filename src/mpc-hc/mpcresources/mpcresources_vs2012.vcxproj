@@ -217,7 +217,6 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Platform)'=='Win32'">$(SolutionDir)bin12\mpc-hc_x86\Lang\</OutDir>
     <OutDir Condition="'$(Platform)'=='x64'">$(SolutionDir)bin12\mpc-hc_x64\Lang\</OutDir>
     <IntDir>$(SolutionDir)bin12\obj\Release_$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
