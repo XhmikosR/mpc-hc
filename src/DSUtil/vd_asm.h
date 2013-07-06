@@ -1,6 +1,5 @@
 //  VirtualDub - Video processing and capture application
-//  Graphics support library
-//  Copyright (C) 1998-2007 Avery Lee
+//  Copyright (C) 1998-2001 Avery Lee
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -17,7 +16,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 //  Notes:
-//  - VDPixmapBlt is from VirtualDub
+//  - BitBltFromI420ToRGB is from VirtualDub
+//  - BitBltFromYUY2ToRGB is from AviSynth 2.52
 //  (- vd.cpp/h should be renamed to something more sensible already :)
 
 #pragma once
@@ -31,4 +31,9 @@ void yv12_yuy2_row_sse2_linear();
 void yv12_yuy2_row_sse2_linear_interlaced();
 void yv12_yuy2_sse2(const BYTE *Y, const BYTE *U, const BYTE *V, int halfstride, unsigned halfwidth, unsigned height, BYTE *YUY2, int d_stride);
 void yv12_yuy2_sse2_interlaced(const BYTE *Y, const BYTE *U, const BYTE *V, int halfstride, unsigned halfwidth, unsigned height, BYTE *YUY2, int d_stride);
+
+void asm_blend_row_clipped_MMX(BYTE* dst, BYTE* src, DWORD w, DWORD srcpitch);
+void asm_blend_row_MMX(BYTE* dst, BYTE* src, DWORD w, DWORD srcpitch);
+void asm_blend_row_SSE2(BYTE* dst, BYTE* src, DWORD w, DWORD srcpitch);
+void asm_blend_row_clipped_SSE2(BYTE* dst, BYTE* src, DWORD w, DWORD srcpitch);
 #endif

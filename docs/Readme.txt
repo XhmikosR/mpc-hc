@@ -67,6 +67,5 @@ Silk Icons          CC Attribution 2.5          http://www.famfamfam.com/lab/ico
 SoundTouch          LGPLv2.1                    http://www.surina.net/soundtouch/
 TreePropSheet       -                           http://www.codeproject.com/Articles/3709/CTreePropSheet-A-Netscape-Visual-Studio-NET-like-P
 UnRAR               freeware                    http://www.rarlab.com/rar_add.htm
-VirtualDub          GPLv2+                      http://www.virtualdub.org/
 ZenLib              zlib License                http://sourceforge.net/projects/zenlib/
 zlib                zlib License                http://zlib.net/

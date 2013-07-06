@@ -351,11 +351,7 @@ HRESULT CBaseVideoFilter::CopyBuffer(BYTE* pOut, BYTE** ppIn, int w, int h, int 
         ASSERT(w <= abs(pitchIn));
 
         if (bihOut.biCompression == '2YUY') {
-            if (!fInterlaced) {
-                BitBltFromI420ToYUY2(w, h, pOut, bihOut.biWidth * 2, pIn, pInU, pInV, pitchIn);
-            } else {
-                BitBltFromI420ToYUY2Interlaced(w, h, pOut, bihOut.biWidth * 2, pIn, pInU, pInV, pitchIn);
-            }
+            BitBltFromI420ToYUY2(w, h, pOut, bihOut.biWidth * 2, pIn, pInU, pInV, pitchIn, fInterlaced);
         } else if (bihOut.biCompression == '024I' || bihOut.biCompression == 'VUYI' || bihOut.biCompression == '21VY') {
             BitBltFromI420ToI420(w, h, pOut, pOutU, pOutV, bihOut.biWidth, pIn, pInU, pInV, pitchIn);
         } else if (bihOut.biCompression == BI_RGB || bihOut.biCompression == BI_BITFIELDS) {

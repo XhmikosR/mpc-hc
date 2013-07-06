@@ -11,9 +11,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="deinterlace.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DSMPropertyBag.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -133,5 +130,16 @@
     <ClInclude Include="WinapiFunc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <YASM Include="a_yuv2rgb.asm">
+      <Filter>Source Files</Filter>
+    </YASM>
+    <YASM Include="a_yuvtable.asm">
+      <Filter>Source Files</Filter>
+    </YASM>
+    <MASM Include="convert_a.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
   </ItemGroup>
 </Project>
