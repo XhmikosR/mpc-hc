@@ -1,5 +1,5 @@
 /*
- * (C) 2006-2016 see Authors.txt
+ * (C) 2006-2017 see Authors.txt
  *
  * This file is part of MPC-HC.
  *
@@ -188,7 +188,8 @@ STDMETHODIMP_(void) CDXRAllocatorPresenter::SetPosition(RECT w, RECT v)
 
 STDMETHODIMP_(SIZE) CDXRAllocatorPresenter::GetVideoSize(bool bCorrectAR) const
 {
-    SIZE size = {0, 0};
+    SIZE size;
+    ZeroMemory(&size, sizeof(size));
 
     if (!bCorrectAR) {
         if (CComQIPtr<IBasicVideo> pBV = m_pDXR) {

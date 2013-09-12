@@ -1,6 +1,6 @@
 /*
  * (C) 2003-2006 Gabest
- * (C) 2006-2013 see Authors.txt
+ * (C) 2006-2013, 2017 see Authors.txt
  *
  * This file is part of MPC-HC.
  *
@@ -35,10 +35,12 @@ CBitStream::CBitStream(IStream* pStream, bool fThrowError)
 {
     ASSERT(m_pStream);
 
-    LARGE_INTEGER li = {0};
+    LARGE_INTEGER li;
+    ZeroMemory(&li, sizeof(li));
     m_pStream->Seek(li, STREAM_SEEK_SET, nullptr);
 
-    ULARGE_INTEGER uli = {0};
+    ULARGE_INTEGER uli;
+    ZeroMemory(&uli, sizeof(uli));
     m_pStream->SetSize(uli); // not that it worked...
 
     m_pStream->Commit(S_OK); // also seems to have no effect, but maybe in the future...
@@ -64,7 +66,8 @@ STDMETHODIMP CBitStream::NonDelegatingQueryInterface(REFIID riid, void** ppv)
 
 STDMETHODIMP_(UINT64) CBitStream::GetPos()
 {
-    ULARGE_INTEGER pos = {0, 0};
+    ULARGE_INTEGER pos;
+    ZeroMemory(&pos, sizeof(pos));
     m_pStream->Seek(*(LARGE_INTEGER*)&pos, STREAM_SEEK_CUR, &pos);
     return pos.QuadPart;
 }

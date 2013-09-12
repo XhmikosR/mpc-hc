@@ -133,7 +133,8 @@ bool CFGManager::CheckBytes(HANDLE hFile, CString chkbytes)
 
     ASSERT(!(sl.GetCount() & 3));
 
-    LARGE_INTEGER size = {0, 0};
+    LARGE_INTEGER size;
+    ZeroMemory(&size, sizeof(size));
     GetFileSizeEx(hFile, &size);
 
     while (sl.GetCount() >= 4) {

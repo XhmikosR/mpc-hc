@@ -9,7 +9,8 @@
 
 static bool aspi_GetSectorInfo(const HANDLE hDrive, DWORD* sec_size, DWORD* max_sec)
 {
-    LARGE_INTEGER size = {0, 0};
+    LARGE_INTEGER size;
+    ZeroMemory(&size, sizeof(size));
     GetFileSizeEx(hDrive, &size);
 
     *sec_size = 2048;

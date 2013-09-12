@@ -1,6 +1,6 @@
 /*
  * (C) 2003-2006 Gabest
- * (C) 2006-2016 see Authors.txt
+ * (C) 2006-2017 see Authors.txt
  *
  * This file is part of MPC-HC.
  *
@@ -509,7 +509,8 @@ bool CQuicktimeWindow::OpenMovie(CString fn)
             return false;
         }
 
-        CHAR buff[MAX_PATH] = {0, 0};
+        CHAR buff[MAX_PATH];
+        ZeroMemory(buff, sizeof(buff));
         WideCharToMultiByte(GetACP(), 0, fn, -1, buff + 1, _countof(buff) - 1, 0, 0);
         buff[0] = (CHAR)strlen(buff + 1);
 

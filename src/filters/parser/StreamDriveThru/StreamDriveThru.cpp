@@ -1,6 +1,6 @@
 /*
  * (C) 2003-2006 Gabest
- * (C) 2006-2013, 2015-2016 see Authors.txt
+ * (C) 2006-2013, 2015-2017 see Authors.txt
  *
  * This file is part of MPC-HC.
  *
@@ -135,8 +135,10 @@ DWORD CStreamDriveThruFilter::ThreadProc()
                         break;
                     }
 
-                    LARGE_INTEGER li = {0};
-                    ULARGE_INTEGER uli = {0};
+                    LARGE_INTEGER li;
+                    ZeroMemory(&li, sizeof(li));
+                    ULARGE_INTEGER uli;
+                    ZeroMemory(&uli, sizeof(uli));
 
                     if (FAILED(pStream->Seek(li, STREAM_SEEK_SET, nullptr))
                             || FAILED(pStream->SetSize(uli))) {

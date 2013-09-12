@@ -1,6 +1,6 @@
 /*
  * (C) 2003-2006 Gabest
- * (C) 2006-2016 see Authors.txt
+ * (C) 2006-2017 see Authors.txt
  *
  * This file is part of MPC-HC.
  *
@@ -272,7 +272,8 @@ bool CCDXAStream::Load(const WCHAR* fnw)
         return false;
     }
 
-    LARGE_INTEGER size = {0, 0};
+    LARGE_INTEGER size;
+    ZeroMemory(&size, sizeof(size));
     GetFileSizeEx(m_hFile, &size);
 
     m_llLength = ((size.QuadPart - RIFFCDXA_HEADER_SIZE) / RAW_SECTOR_SIZE) * RAW_DATA_SIZE;

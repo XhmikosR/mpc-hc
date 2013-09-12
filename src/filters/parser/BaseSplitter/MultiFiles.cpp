@@ -1,5 +1,5 @@
 /*
- * (C) 2009-2014 see Authors.txt
+ * (C) 2009-2014, 2017 see Authors.txt
  *
  * This file is part of MPC-HC.
  *
@@ -110,7 +110,8 @@ ULONGLONG CMultiFiles::Seek(LONGLONG lOff, UINT nFrom)
 
 ULONGLONG CMultiFiles::GetAbsolutePosition(LONGLONG lOff, UINT nFrom)
 {
-    LARGE_INTEGER llNoMove = {0, 0};
+    LARGE_INTEGER llNoMove;
+    ZeroMemory(&llNoMove, sizeof(llNoMove));
     LARGE_INTEGER llCurPos;
 
     switch (nFrom) {

@@ -1,6 +1,6 @@
 /*
  * (C) 2003-2006 Gabest
- * (C) 2006-2016 see Authors.txt
+ * (C) 2006-2017 see Authors.txt
  *
  * This file is part of MPC-HC.
  *
@@ -344,7 +344,8 @@ STDMETHODIMP CMatroskaMuxerFilter::CorrectTimeOffset(bool fNegative, bool fPosit
 
 ULONGLONG GetStreamPosition(IStream* pStream)
 {
-    ULARGE_INTEGER pos = {0, 0};
+    ULARGE_INTEGER pos;
+    ZeroMemory(&pos, sizeof(pos));
     pStream->Seek(*(LARGE_INTEGER*)&pos, STREAM_SEEK_CUR, &pos);
     return pos.QuadPart;
 }
@@ -383,7 +384,8 @@ DWORD CMatroskaMuxerFilter::ThreadProc()
 
     SetStreamPosition(pStream, 0);
 
-    ULARGE_INTEGER uli = {0};
+    ULARGE_INTEGER uli;
+    ZeroMemory(&uli, sizeof(uli));
     pStream->SetSize(uli);
 
     EBML hdr;

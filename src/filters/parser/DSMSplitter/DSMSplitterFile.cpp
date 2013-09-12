@@ -1,6 +1,6 @@
 /*
  * (C) 2003-2006 Gabest
- * (C) 2006-2013 see Authors.txt
+ * (C) 2006-2013, 2017 see Authors.txt
  *
  * This file is part of MPC-HC.
  *
@@ -210,7 +210,8 @@ bool CDSMSplitterFile::Read(__int64 len, Packet* p, bool fData)
 
 bool CDSMSplitterFile::Read(__int64 len, CAtlArray<SyncPoint>& sps)
 {
-    SyncPoint sp = {0, 0};
+    SyncPoint sp;
+    ZeroMemory(&sp, sizeof(sp));
     sps.RemoveAll();
 
     while (len > 0) {

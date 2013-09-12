@@ -1,6 +1,6 @@
 /*
  * (C) 2003-2006 Gabest
- * (C) 2006-2014, 2016 see Authors.txt
+ * (C) 2006-2014, 2016-2017 see Authors.txt
  *
  * This file is part of MPC-HC.
  *
@@ -226,7 +226,8 @@ void CRealMediaWindowlessSite::ComputeRegion()
         RMADestroyRegion(m_pRegionWithoutChildren);
     }
 
-    PNxPoint topleft = {0, 0};
+    PNxPoint topleft;
+    ZeroMemory(&topleft, sizeof(topleft));
     GetTopLeft(&topleft);
 
     if (IsSiteVisible()) {
