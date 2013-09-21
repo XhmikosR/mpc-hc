@@ -1325,6 +1325,12 @@ void CDX9AllocatorPresenter::UpdateAlphaBitmap()
 
 STDMETHODIMP_(bool) CDX9AllocatorPresenter::Paint(bool bAll)
 {
+    CRect rSrcVid(CPoint(0, 0), GetVisibleVideoSize());
+    return Paint(fAll, rSrcVid);
+}
+
+STDMETHODIMP_(bool) CDX9AllocatorPresenter::Paint(bool fAll, CRect rSrcVid)
+{
     if (m_bPendingResetDevice) {
         SendResetRequest();
         return false;
@@ -1371,7 +1377,6 @@ STDMETHODIMP_(bool) CDX9AllocatorPresenter::Paint(bool bAll)
     m_pD3DDev->SetRenderTarget(0, pBackBuffer);
     hr = m_pD3DDev->Clear(0, nullptr, D3DCLEAR_TARGET, 0, 1.0f, 0);
 
-    CRect rSrcVid(CPoint(0, 0), GetVisibleVideoSize());
     CRect rDstVid(m_videoRect);
 
     CRect rSrcPri(CPoint(0, 0), m_windowRect.Size());
@@ -1446,6 +1451,14 @@ STDMETHODIMP_(bool) CDX9AllocatorPresenter::Paint(bool bAll)
 
     m_pD3DDev->EndScene();
 
+    return AfterEndScene(fAll, StartPaint, rSrcPri, rDstPri);
+}
+
+STDMETHODIMP_(bool) CDX9AllocatorPresenter::AfterEndScene(bool fAll, LONGLONG StartPaint, CRect& rSrcPri, CRect& rDstPri)
+{
+    const CRenderersSettings& r = GetRenderersSettings();
+    CRenderersData* pApp = GetRenderersData();
+
     BOOL bCompositionEnabled = m_bCompositionEnabled;
 
     bool bDoVSyncInPresent = (!bCompositionEnabled && !m_bAlternativeVSync) || !r.m_AdvRendSets.bVMR9VSync;
@@ -1503,6 +1516,7 @@ STDMETHODIMP_(bool) CDX9AllocatorPresenter::Paint(bool bAll)
     // Create a device pointer m_pd3dDevice
 
     // Create a query object
+    HRESULT hr;
     {
         CComPtr<IDirect3DQuery9> pEventQueryFlushAfterVSync;
         m_pD3DDev->CreateQuery(D3DQUERYTYPE_EVENT, &pEventQueryFlushAfterVSync);

@@ -85,6 +85,7 @@ namespace DSObjects
         HRESULT AlphaBlt(const RECT* pSrc, const RECT* pDst, IDirect3DTexture9* pTexture);
 
         HRESULT SetCustomPixelShader(LPCSTR pSrcData, LPCSTR pTarget, bool bScreenSpace);
+        bool    ClipToSurface(IDirect3DSurface9* pSurface, CRect& s, CRect& d);
 
 
     private:
@@ -178,7 +179,6 @@ namespace DSObjects
         HRESULT FinalPass(IDirect3DTexture9* pTexture);
 
         HRESULT TextureCopy(IDirect3DTexture9* pTexture);
-        bool    ClipToSurface(IDirect3DSurface9* pSurface, CRect& s, CRect& d);
     };
 
 }

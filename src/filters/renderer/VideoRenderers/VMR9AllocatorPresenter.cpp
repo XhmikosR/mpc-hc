@@ -43,6 +43,9 @@ CVMR9AllocatorPresenter::CVMR9AllocatorPresenter(HWND hWnd, bool bFullscreen, HR
     , m_fUseInternalTimer(false)
     , m_rtPrevStart(-1)
 {
+    this->hWnd = hWnd;
+    m_nNbDXSurface = 2;
+    renderer = 0;
 }
 
 STDMETHODIMP CVMR9AllocatorPresenter::NonDelegatingQueryInterface(REFIID riid, void** ppv)
@@ -229,6 +232,18 @@ STDMETHODIMP CVMR9AllocatorPresenter::InitializeDevice(DWORD_PTR dwUserID, VMR9A
     *lpNumBuffers = std::min(nOriginal, *lpNumBuffers);
     m_iVMR9Surface = 0;
 
+    // Initialize the 3D rendering engine
+
+    // Remove old instances
+    if (renderer) {
+        delete renderer;
+        renderer = 0;
+    }
+
+    // Create rendering engine
+    renderer = new Seefront3DRenderer(m_pD3DDev, m_ScreenSize);
+    renderer->Initialize3DDevice(m_pD3DDev, m_ScreenSize);
+
     return hr;
 }
 
@@ -237,6 +252,12 @@ STDMETHODIMP CVMR9AllocatorPresenter::TerminateDevice(DWORD_PTR dwUserID)
     // We should not free the surfaces until we are told to !
     // Thats what TerminateDevice is for
     DeleteSurfaces();
+
+    if (renderer) {
+        delete renderer;
+        renderer = 0;
+    }
+
     return S_OK;
 }
 
@@ -454,7 +475,59 @@ STDMETHODIMP CVMR9AllocatorPresenter::PresentImage(DWORD_PTR dwUserID, VMR9Prese
         }
     }
 
-    Paint(true);
+    CRect realWindow;
+    GetWindowRect(this->hWnd, &realWindow);
+    renderer->UpdateWindow(realWindow.left, realWindow.top, realWindow.Width(), realWindow.Height());
+
+    //  renderer->SetTextureSize(m_pD3DDev, targetSize.cx, targetSize.cy);
+
+    SIZE targetSize = m_WindowRect.Size();
+    CRect videoSource(CPoint(0, 0), GetVisibleVideoSize());
+    CRect leftEye(videoSource.left, videoSource.top, (videoSource.left + videoSource.right) / 2, videoSource.bottom);
+    CRect rightEye((videoSource.left + videoSource.right) / 2, videoSource.top, videoSource.right, videoSource.bottom);
+
+    CRect windowRect(0, 0, targetSize.cx, targetSize.cy);
+
+    // Original: Paint(true);
+
+    if (m_bPendingResetDevice) {
+        SendResetRequest();
+        return false;
+    }
+    CRenderersData* pApp = GetRenderersData();
+
+    LONGLONG StartPaint = pApp->GetPerfCounter();
+
+    if (m_WindowRect.right <= m_WindowRect.left || m_WindowRect.bottom <= m_WindowRect.top
+            || m_NativeVideoSize.cx <= 0 || m_NativeVideoSize.cy <= 0
+            || !m_pVideoSurface[m_nCurSurface]) {
+        if (m_OrderedPaint) {
+            --m_OrderedPaint;
+        } else {
+            //TRACE(_T("UNORDERED PAINT!!!!!!\n"));
+        }
+
+        return S_OK;
+    }
+
+    // Put it on the screen scene
+    HRESULT hr;
+
+    RenderVideo(renderer->GetLeftEye(), leftEye, windowRect);
+    RenderVideo(renderer->GetRightEye(), rightEye, windowRect);
+
+    CComPtr<IDirect3DSurface9> pBackBuffer;
+    m_pD3DDev->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &pBackBuffer);
+
+    // Clear the backbuffer
+    m_pD3DDev->SetRenderTarget(0, pBackBuffer);
+    hr = m_pD3DDev->Clear(0, nullptr, D3DCLEAR_TARGET, 0xFF0000, 1.0f, 0);
+
+    // Render the frame!
+    renderer->Render();
+
+    // Draw on the window
+    m_pD3DDev->Present(0, 0, 0, 0); // display
 
     return S_OK;
 }

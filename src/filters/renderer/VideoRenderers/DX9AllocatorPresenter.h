@@ -295,6 +295,8 @@ namespace DSObjects
         // ISubPicAllocatorPresenter
         STDMETHODIMP CreateRenderer(IUnknown** ppRenderer);
         STDMETHODIMP_(bool) Paint(bool bAll);
+        STDMETHODIMP_(bool) Paint(bool fAll, CRect rSrcVid);
+        STDMETHODIMP_(bool) AfterEndScene(bool fAll, LONGLONG startPaint, CRect& rSrcPri, CRect& rDstPri);
         STDMETHODIMP GetDIB(BYTE* lpDib, DWORD* size);
         STDMETHODIMP SetPixelShader(LPCSTR pSrcData, LPCSTR pTarget);
         STDMETHODIMP SetPixelShader2(LPCSTR pSrcData, LPCSTR pTarget, bool bScreenSpace);

@@ -1,5 +1,5 @@
 /*
- * (C) 2006-2012 see Authors.txt
+ * (C) 2006-2013, 2017 see Authors.txt
  *
  * This file is part of MPC-HC.
  *
@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include "Base3DRenderer.h"
+#include "Seefront3DRenderer.h"
 #include "DX9AllocatorPresenter.h"
 
 namespace DSObjects
@@ -39,6 +41,9 @@ namespace DSObjects
 
         bool m_fUseInternalTimer;
         REFERENCE_TIME m_rtPrevStart;
+
+        HWND hWnd;
+        Base3DRenderer* renderer;
 
     public:
         CVMR9AllocatorPresenter(HWND hWnd, bool bFullscreen, HRESULT& hr, CString& _Error);

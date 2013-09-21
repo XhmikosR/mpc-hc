@@ -1,5 +1,5 @@
 /*
- * (C) 2006-2015 see Authors.txt
+ * (C) 2006-2015, 2017 see Authors.txt
  *
  * This file is part of MPC-HC.
  *
@@ -233,7 +233,7 @@ HRESULT CDX9RenderingEngine::CreateVideoSurfaces()
     CheckPointer(m_pD3DDev, E_POINTER);
 
     if (r.iAPSurfaceUsage == VIDRNDT_AP_TEXTURE2D || r.iAPSurfaceUsage == VIDRNDT_AP_TEXTURE3D) {
-        int nTexturesNeeded = r.iAPSurfaceUsage == VIDRNDT_AP_TEXTURE3D ? m_nNbDXSurface : 1;
+        int nTexturesNeeded = (r.iAPSurfaceUsage == VIDRNDT_AP_TEXTURE3D ? m_nNbDXSurface : 1);
 
         for (int i = 0; i < nTexturesNeeded; i++) {
             if (FAILED(hr = m_pD3DDev->CreateTexture(
@@ -290,12 +290,19 @@ HRESULT CDX9RenderingEngine::RenderVideo(IDirect3DSurface9* pRenderTarget, const
     if (destRect.IsRectEmpty()) {
         return S_OK;
     }
+    HRESULT hr;
 
     if (m_RenderingPath == RENDERING_PATH_DRAW) {
-        return RenderVideoDrawPath(pRenderTarget, srcRect, destRect);
+        if ((hr = RenderVideoDrawPath(pRenderTarget, srcRect, destRect)) != S_OK) {
+            return hr;
+        }
     } else {
-        return RenderVideoStretchRectPath(pRenderTarget, srcRect, destRect);
+        if ((hr = RenderVideoStretchRectPath(pRenderTarget, srcRect, destRect)) != S_OK) {
+            return hr;
+        }
     }
+
+    return hr;
 }
 
 HRESULT CDX9RenderingEngine::RenderVideoDrawPath(IDirect3DSurface9* pRenderTarget, const CRect& srcRect, const CRect& destRect)
