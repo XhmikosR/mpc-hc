@@ -25,7 +25,6 @@
 #include <Mferror.h>
 #include "IPinHook.h"
 #include "MacrovisionKicker.h"
-#include "IMPCVideoDecFilter.h"
 
 #if (0)     // Set to 1 to activate EVR traces
 #define TRACE_EVR   TRACE
@@ -1607,19 +1606,6 @@ void CEVRAllocatorPresenter::GetMixerThread()
                 bQuit = true;
                 break;
             case WAIT_TIMEOUT: {
-                if (GetRenderersData()->m_iDisplayStats) {
-                    CComPtr<IPin> pPin;
-                    CComPtr<IPin> pPinTo;
-                    if (SUCCEEDED(m_pOuterEVR->FindPin(L"EVR Input0", &pPin)) &&
-                            SUCCEEDED(pPin->ConnectedTo(&pPinTo)) && pPinTo) {
-                        if (CComPtr<IBaseFilter> pFilter = GetFilterFromPin(pPinTo)) {
-                            if (CComQIPtr<IMPCVideoDecFilter2> MPCVideoDecFilter = pFilter) {
-                                m_nFrameType = (FF_FIELD_TYPE)MPCVideoDecFilter->GetFrameType();
-                            }
-                        }
-                    }
-                }
-
                 bool bDoneSomething = false;
                 {
                     CAutoLock AutoLock(&m_ImageProcessingLock);
