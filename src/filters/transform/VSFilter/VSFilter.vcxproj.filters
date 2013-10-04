@@ -91,6 +91,9 @@
     <ClInclude Include="IDirectVobSub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
     <ClInclude Include="Scale2x.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -112,8 +115,8 @@
     <ClInclude Include="VSFilter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Resource Files</Filter>
+    <ClInclude Include="vsfilter_version.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\mpc-hc\ColorButton.h">
       <Filter>Controls</Filter>

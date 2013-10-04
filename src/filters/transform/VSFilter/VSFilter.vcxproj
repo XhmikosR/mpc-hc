@@ -97,6 +97,7 @@
     <ClInclude Include="TextInputPin.h" />
     <ClInclude Include="vfr.h" />
     <ClInclude Include="VSFilter.h" />
+    <ClInclude Include="vsfilter_version.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VSFilter.rc" />

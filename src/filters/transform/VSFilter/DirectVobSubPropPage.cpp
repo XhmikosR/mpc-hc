@@ -31,7 +31,7 @@
 #include "../../../DSUtil/DSUtil.h"
 #include "../../../DSUtil/MediaTypes.h"
 
-#include "version.h"
+#include "vsfilter_version.h"
 
 
 BOOL WINAPI MyGetDialogSize(int iResourceID, DLGPROC pDlgProc, LPARAM lParam, SIZE* pResult)
@@ -885,7 +885,7 @@ bool CDVSAboutPPage::OnMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg) {
         case WM_INITDIALOG: {
-            SetDlgItemText(m_Dlg, IDC_VERSION, _T("VSFilter 2.41.") MAKE_STR(MPC_VERSION_REV) _T(" ") MPC_VERSION_ARCH _T("\nCopyright 2001-2013 MPC-HC Team"));
+            SetDlgItemText(m_Dlg, IDC_VERSION, VSFILTER_VERSION);
         }
         break;
         case WM_COMMAND: {
