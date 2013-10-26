@@ -896,7 +896,7 @@ void CLine::Compact()
     pos = GetTailPosition();
     while (pos) {
         CWord* w = GetPrev(pos);
-        if (!w->m_fWhiteSpaceChar) {
+        if (!w) {
             break;
         }
 

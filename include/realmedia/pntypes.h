@@ -165,8 +165,8 @@ typedef ULONG32                 UFIXED32;           /* FIXED point value  */
  * value 
  */
 
-typedef const char*             PCSTR;
-
+//typedef const char*             PCSTR;
+typedef _Null_terminated_ CONST CHAR *LPCSTR, *PCSTR; /* MPC-HC patch to fix inconsistent annotation for PCSTR */
 /*
  *  FOURCC's are 32bit codes used in Tagged File formats like
  *  the RealMedia file format.

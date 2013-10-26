@@ -173,14 +173,16 @@ VFRTranslator* GetVFRTranslator(const char* vfrfile)
     FILE* f;
     fopen_s(&f, vfrfile, "r"); // errno_t err = <-- TODO: Check if fopen_s fails
     VFRTranslator* res = 0;
-    if (fgets(buf, _countof(buf), f) && buf[0] == '#') {
-        // So do some really shoddy parsing here, assume the file is good
-        if (buf[19] == '1') {
-            res = DEBUG_NEW TimecodesV1(f);
-        } else if (buf[19] == '2') {
-            res = DEBUG_NEW TimecodesV2(f);
+    if (f) {
+        if (fgets(buf, _countof(buf), f) && buf[0] == '#') {
+            // So do some really shoddy parsing here, assume the file is good
+            if (buf[19] == '1') {
+                res = DEBUG_NEW TimecodesV1(f);
+            } else if (buf[19] == '2') {
+                res = DEBUG_NEW TimecodesV2(f);
+            }
         }
+        fclose(f);
     }
-    fclose(f);
     return res;
 }
