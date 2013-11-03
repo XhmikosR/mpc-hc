@@ -2540,15 +2540,10 @@ LRESULT CMainFrame::OnGraphNotify(WPARAM wParam, LPARAM lParam)
 
                                 m_pDVDC->PlayTitle(dvdPosition->lTitle, DVD_CMD_FLAG_Block | DVD_CMD_FLAG_Flush, nullptr);
                                 m_pDVDC->Resume(DVD_CMD_FLAG_Block | DVD_CMD_FLAG_Flush, nullptr);
-#if 1
+
                                 if (SUCCEEDED(hr = m_pDVDC->PlayAtTimeInTitle(
                                                        dvdPosition->lTitle, &dvdPosition->timecode,
-                                                       DVD_CMD_FLAG_Block | DVD_CMD_FLAG_Flush, nullptr)))
-#else
-                                if (SUCCEEDED(hr = m_pDVDC->PlayAtTime(&dvdPosition->timecode,
-                                                                       DVD_CMD_FLAG_Flush, nullptr)))
-#endif
-                                {
+                                                       DVD_CMD_FLAG_Block | DVD_CMD_FLAG_Flush, nullptr))) {
                                     m_iDVDTitle = dvdPosition->lTitle;
                                 }
                             }

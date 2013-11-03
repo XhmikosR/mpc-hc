@@ -1425,61 +1425,6 @@ static void LogDXVA2VideoDesc(const DXVA2_VideoDesc* pVideoDesc)
 }
 #endif
 
-#if 0
-// Function not used yet
-static void LogVideoCardCaps(IDirectXVideoDecoderService* pDecoderService)
-{
-    HRESULT hr;
-    UINT cDecoderGuids = 0;
-    GUID* pDecoderGuids = nullptr;
-
-    hr = pDecoderService->GetDecoderDeviceGuids(&cDecoderGuids, &pDecoderGuids);
-    if (SUCCEEDED(hr)) {
-        // Look for the decoder GUIDs we want.
-        for (UINT iGuid = 0; iGuid < cDecoderGuids; iGuid++) {
-            LOG(_T("=== New mode : %s"), GetDXVAMode(&pDecoderGuids[iGuid]));
-
-            // Find a configuration that we support.
-            UINT cFormats = 0;
-            UINT cConfigurations = 0;
-            D3DFORMAT* pFormats = nullptr;
-            DXVA2_ConfigPictureDecode* pConfig = nullptr;
-            DXVA2_VideoDesc m_VideoDesc;
-
-            hr = pDecoderService->GetDecoderRenderTargets(pDecoderGuids[iGuid], &cFormats, &pFormats);
-
-            if (SUCCEEDED(hr)) {
-                // Look for a format that matches our output format.
-                for (UINT iFormat = 0; iFormat < cFormats;  iFormat++) {
-                    LOG(_T("Direct 3D format : %s"),   FindD3DFormat(pFormats[iFormat]));
-                    // Fill in the video description. Set the width, height, format, and frame rate.
-                    ZeroMemory(&m_VideoDesc, sizeof(m_VideoDesc));
-                    m_VideoDesc.SampleWidth = 1280;
-                    m_VideoDesc.SampleHeight = 720;
-                    m_VideoDesc.Format = pFormats[iFormat];
-
-                    // Get the available configurations.
-                    hr = pDecoderService->GetDecoderConfigurations(pDecoderGuids[iGuid], &m_VideoDesc, nullptr, &cConfigurations, &pConfig);
-
-                    if (SUCCEEDED(hr)) {
-
-                        // Find a supported configuration.
-                        for (UINT iConfig = 0; iConfig < cConfigurations; iConfig++) {
-                            LogDXVA2Config(&pConfig[iConfig]);
-                        }
-
-                        CoTaskMemFree(pConfig);
-                    }
-                }
-            }
-
-            LOG(_T("\n"));
-            CoTaskMemFree(pFormats);
-        }
-    }
-}
-#endif
-
 static HRESULT STDMETHODCALLTYPE CreateVideoDecoderMine(
     IDirectXVideoDecoderServiceC* pThis,
     __in REFGUID Guid,

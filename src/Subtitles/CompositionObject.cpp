@@ -1,5 +1,5 @@
 /*
- * (C) 2009-2015 see Authors.txt
+ * (C) 2009-2015, 2017 see Authors.txt
  *
  * This file is part of MPC-HC.
  *
@@ -190,10 +190,6 @@ void CompositionObject::RenderDvb(SubPicDesc& spd, short nX, short nY)
 
 void CompositionObject::DvbRenderField(SubPicDesc& spd, CGolombBuffer& gb, short nXStart, short nYStart, short nLength)
 {
-    //FillSolidRect(spd, nXStart, nYStart, m_width, m_height, 0xFFFF0000);  // Red opaque
-    //FillSolidRect(spd, nXStart, nYStart, m_width, m_height, 0xCC00FF00);  // Green 80%
-    //FillSolidRect(spd, nXStart, nYStart, m_width, m_height, 0x100000FF);  // Blue 60%
-    //return;
     short nX = nXStart;
     short nY = nYStart;
     size_t nEnd = gb.GetPos() + nLength;

@@ -287,15 +287,11 @@ STDMETHODIMP CEVRAllocatorPresenter::CreateRenderer(IUnknown** ppRenderer)
         hr = pMFVR->InitializeRenderer(nullptr, pVP);
     }
 
-#if 1
     CComPtr<IPin> pPin = GetFirstPin(pBF);
     CComQIPtr<IMemInputPin> pMemInputPin = pPin;
 
     // No NewSegment : no chocolate :o)
     m_fUseInternalTimer = HookNewSegmentAndReceive((IPinC*)(IPin*)pPin, (IMemInputPinC*)(IMemInputPin*)pMemInputPin);
-#else
-    m_fUseInternalTimer = false;
-#endif
 
     if (FAILED(hr)) {
         *ppRenderer = nullptr;
@@ -1697,8 +1693,6 @@ LONGLONG CEVRAllocatorPresenter::GetClockTime(LONGLONG PerformanceCounter)
     m_ModeratedTimeLast  = llPerf;
     m_ModeratedClockLast = llClockTime;
 
-#if 1
-
     if (bReset) {
         m_ModeratedTimeSpeed = 1.0;
         m_ModeratedTimeSpeedPrim = 0.0;
@@ -1742,90 +1736,6 @@ LONGLONG CEVRAllocatorPresenter::GetClockTime(LONGLONG PerformanceCounter)
     }
 
     return (LONGLONG)Target;
-#else
-    double EstimateTime = m_ModeratedTime + TimeChange * m_ModeratedTimeSpeed + m_ClockDiffCalc;
-    double Diff = Target - EstimateTime;
-
-    // > 5 ms just set it
-    if ((fabs(Diff) > 50000.0 || bReset)) {
-
-        //      TRACE_EVR("EVR: Reset clock at diff: %f ms\n", (m_ModeratedTime - Target) /10000.0);
-        if (State == MFCLOCK_STATE_RUNNING) {
-            if (bReset) {
-                m_ModeratedTimeSpeed = 1.0;
-                m_ModeratedTimeSpeedPrim = 0.0;
-                m_ClockDiffCalc  = 0;
-                m_ClockDiffPrim  = 0;
-                m_ModeratedTime  = Target;
-                m_ModeratedTimer = llPerf;
-            } else {
-                EstimateTime = m_ModeratedTime + TimeChange * m_ModeratedTimeSpeed;
-                Diff = Target - EstimateTime;
-                m_ClockDiffCalc = Diff;
-                m_ClockDiffPrim = 0;
-            }
-        } else {
-            m_ModeratedTimeSpeed = 0.0;
-            m_ModeratedTimeSpeedPrim = 0.0;
-            m_ClockDiffCalc  = 0;
-            m_ClockDiffPrim  = 0;
-            m_ModeratedTime  = Target;
-            m_ModeratedTimer = llPerf;
-        }
-    }
-
-    {
-        LONGLONG ModerateTime = 10000;
-        double ChangeSpeed = 1.00;
-        /*if (m_ModeratedTimeSpeedPrim != 0.0)
-          {
-              if (m_ModeratedTimeSpeedPrim < 0.1)
-                  ChangeSpeed = 0.1;
-          }*/
-
-        int nModerate = 0;
-        double Change = 0;
-        while (m_ModeratedTimer < llPerf - ModerateTime) {
-            m_ModeratedTimer += ModerateTime;
-            m_ModeratedTime += double(ModerateTime) * m_ModeratedTimeSpeed;
-
-            double TimerDiff = llPerf - m_ModeratedTimer;
-
-            double Diff = (double)(m_ModeratedTime - (Target - TimerDiff));
-
-            double TimeSpeedTarget;
-            double AbsDiff = fabs(Diff);
-            TimeSpeedTarget = 1.0 - (Diff / 1000000.0);
-            //          TimeSpeedTarget = m_ModeratedTimeSpeed - (Diff / 100000000000.0);
-            //if (AbsDiff > 20000.0)
-            //              TimeSpeedTarget = 1.0 - (Diff / 1000000.0);
-            /*else if (AbsDiff > 5000.0)
-                TimeSpeedTarget = 1.0 - (Diff / 100000000.0);
-            else
-                TimeSpeedTarget = 1.0 - (Diff / 500000000.0);*/
-            double StartMod = m_ModeratedTimeSpeed;
-            ModerateFloat(m_ModeratedTimeSpeed, TimeSpeedTarget, m_ModeratedTimeSpeedPrim, ChangeSpeed);
-            m_ModeratedTimeSpeed = TimeSpeedTarget;
-            ++nModerate;
-            Change += m_ModeratedTimeSpeed - StartMod;
-        }
-        if (nModerate) {
-            m_ModeratedTimeSpeedDiff = Change / nModerate;
-        }
-
-        double Ret = m_ModeratedTime + double(llPerf - m_ModeratedTimer) * m_ModeratedTimeSpeed;
-        double Diff = Target - Ret;
-        ModerateFloat(m_ClockDiffCalc, Diff, m_ClockDiffPrim, ChangeSpeed * 0.1);
-
-        Ret += m_ClockDiffCalc;
-        Diff = Target - Ret;
-        m_ClockDiff = Diff;
-        return LONGLONG(Ret + 0.5);
-    }
-
-    return Target;
-    return LONGLONG(m_ModeratedTime + 0.5);
-#endif
 }
 
 void CEVRAllocatorPresenter::OnVBlankFinished(bool bAll, LONGLONG PerformanceCounter)
@@ -1867,7 +1777,6 @@ void CEVRAllocatorPresenter::OnVBlankFinished(bool bAll, LONGLONG PerformanceCou
         LONGLONG SyncOffset = nsSampleTime - llClockTime;
 
         m_pllSyncOffset[m_nNextSyncOffset] = SyncOffset;
-        //TRACE_EVR("EVR: SyncOffset(%d, %d): %8I64d     %8I64d     %8I64d \n", m_nCurSurface, m_VSyncMode, m_LastPredictedSync, -SyncOffset, m_LastPredictedSync - (-SyncOffset));
 
         m_MaxSyncOffset = MINLONG64;
         m_MinSyncOffset = MAXLONG64;
@@ -2008,16 +1917,7 @@ void CEVRAllocatorPresenter::RenderThread()
             NextSleepTime = 1;
         }
         DWORD dwObject = WaitForMultipleObjects(_countof(hEvts), hEvts, FALSE, std::max(NextSleepTime < 0 ? 1 : NextSleepTime, 0));
-        /*      dwObject = WAIT_TIMEOUT;
-                if (m_bEvtFlush)
-                    dwObject = WAIT_OBJECT_0 + 1;
-                else if (m_bEvtQuit)
-                    dwObject = WAIT_OBJECT_0;*/
-        //      if (NextSleepTime)
-        //          TRACE_EVR("EVR: Sleep: %7.3f\n", double(GetRenderersData()->GetPerfCounter()-llPerf) / 10000.0);
-        if (NextSleepTime > 1) {
-            NextSleepTime = 0;
-        } else if (NextSleepTime == 0) {
+        if (NextSleepTime == 0) {
             NextSleepTime = -1;
         }
         switch (dwObject) {
@@ -2162,8 +2062,6 @@ void CEVRAllocatorPresenter::RenderThread()
 
                                     SyncOffset = (nsSampleTime - ClockTimeAtNextVSync);
 
-                                    //if (SyncOffset < 0)
-                                    //    TRACE_EVR("EVR: SyncOffset(%d): %I64d     %I64d     %I64d\n", m_nCurSurface, SyncOffset, TimePerFrame, VSyncTime);
                                 } else {
                                     SyncOffset = (nsSampleTime - llClockTime);
                                 }
@@ -2206,9 +2104,6 @@ void CEVRAllocatorPresenter::RenderThread()
                                     bStepForward = true;
                                     ++m_nDroppedUpdate;
                                     NextSleepTime = 0;
-                                    //VSyncOffset0 = (-SyncOffset) - VSyncTime;
-                                    //VSyncOffset0 = (-SyncOffset) - VSyncTime + TimePerFrameMargin1;
-                                    //m_LastPredictedSync = VSyncOffset0;
                                     bDoVSyncCorrection = false;
                                 } else if (SyncOffset < TimePerFrameMargin1) {
 
@@ -2775,37 +2670,6 @@ void CEVRAllocatorPresenter::AddToScheduledList(IMFSample* pSample, bool bSorted
             --m_FrameTimeCorrection;
         }
 
-#if 0
-        if (Time <= m_LastScheduledUncorrectedSampleTime && m_LastScheduledSampleTime >= 0) {
-            PrevTime = m_LastScheduledSampleTime;
-        }
-
-        m_bCorrectedFrameTime = false;
-        if (PrevTime != -1 && (Time >= PrevTime - ((Duration * 20) / 9) || Time == 0) || ForceFPS != 0.0) {
-            if (Time - PrevTime > ((Duration * 20) / 9) && Time - PrevTime < Duration * 8 || Time == 0 || ((Time - PrevTime) < (Duration / 11)) || ForceFPS != 0.0) {
-                // Error!!!!
-                Time = PrevTime + Duration;
-                pSample->SetSampleTime(Time);
-                pSample->SetSampleDuration(Duration);
-                m_bCorrectedFrameTime = true;
-                TRACE_EVR("EVR: Corrected invalid sample time\n");
-            }
-        }
-        if (Time + Duration * 10 < m_LastScheduledSampleTime) {
-            // Flush when repeating movie
-            FlushSamplesInternal();
-        }
-#endif
-
-#if 0
-        static LONGLONG LastDuration = 0;
-        LONGLONG SetDuration = m_rtTimePerFrame;
-        pSample->GetSampleDuration(&SetDuration);
-        if (SetDuration != LastDuration) {
-            TRACE_EVR("EVR: Old duration: %I64d New duration: %I64d\n", LastDuration, SetDuration);
-        }
-        LastDuration = SetDuration;
-#endif
         m_LastScheduledSampleTime = Time;
 
         m_ScheduledSamples.AddTail(pSample);
