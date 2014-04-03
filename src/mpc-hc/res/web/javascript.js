@@ -14,7 +14,8 @@ var state;
 var pbr;
 var eta;
 var volume;
-var muted; // 1 no sound
+var muted;
+var hasAudio;
 var startTime = new Date().getTime();
 var sliderSize = 500;
 var sliderButtonWidth = 15;
@@ -325,9 +326,13 @@ function controlsInit(_filePath, _curPos, _length, _state, _pbr, _eta, _volume, 
     vs2 = getById("v2");
     vs3 = getById("v3");
 
-    if (muted === 1) {
-        getById("muted").innerHTML = "M";
+    if (!hasAudio) {
+        getById("muted").innerHTML = "&times;";
     }
+    if (muted) {
+        getById("muted").innerHTML += "M";
+    }
+
     vs2.title = volume;
     sb2.title = secondsToTS(curPos, 5);
     s.height = sb1.height = sb2.height = sb3.height = vs.height = vs1.height = vs2.height = vs3.height = 20;
