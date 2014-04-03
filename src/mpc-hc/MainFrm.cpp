@@ -725,6 +725,7 @@ CMainFrame::CMainFrame()
     , m_bOpeningInAutochangedMonitorMode(false)
     , m_bPausedForAutochangeMonitorMode(false)
     , m_fAudioOnly(true)
+    , m_bHasAudio(true)
     , m_iDVDDomain(DVD_DOMAIN_Stop)
     , m_iDVDTitle(0)
     , m_dSpeedRate(1.0)
@@ -2082,6 +2083,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
                         AATR.bNumberOfChannels == 1 ? IDB_AUDIOTYPE_MONO
                         : AATR.bNumberOfChannels >= 2 ? IDB_AUDIOTYPE_STEREO
                         : IDB_AUDIOTYPE_NOAUDIO);
+                    m_bHasAudio = (AATR.bNumberOfChannels != 0);
                 }
 
                 m_wndInfoBar.SetLine(StrRes(IDS_INFOBAR_AUDIO), Audio);
@@ -2697,6 +2699,7 @@ LRESULT CMainFrame::OnGraphNotify(WPARAM wParam, LPARAM lParam)
                     m_wndStatusBar.SetStatusBitmap(nAudioChannels == 1 ? IDB_AUDIOTYPE_MONO
                                                    : nAudioChannels >= 2 ? IDB_AUDIOTYPE_STEREO
                                                    : IDB_AUDIOTYPE_NOAUDIO);
+                    m_bHasAudio = (nAudioChannels > 0);
                 }
                 break;
             case EC_BG_ERROR:
@@ -4450,7 +4453,7 @@ void CMainFrame::SaveDIB(LPCTSTR fn, BYTE* pData, long size)
 
         Gdiplus::Bitmap* bm = new Gdiplus::Bitmap(w, h, dstpitch, PixelFormat24bppRGB, p);
 
-        UINT num;       // number of image encoders
+        UINT num;  // number of image encoders
         UINT arraySize; // size, in bytes, of the image encoder array
 
         // How many encoders are there?
@@ -9860,7 +9863,7 @@ void CMainFrame::MoveVideoWindow(bool fShowStats/* = false*/, bool bSetStoppedVi
             Vector v(Vector::DegToRad(m_AngleX), Vector::DegToRad(m_AngleY), Vector::DegToRad(m_AngleZ));
             m_pCAP->SetVideoAngle(v);
             UpdateSubAspectRatioCompensation();
-        } else  {
+        } else {
             m_pBV->SetDefaultSourcePosition();
             m_pBV->SetDestinationPosition(videoRect.left, videoRect.top, videoRect.Width(), videoRect.Height());
             m_pVW->SetWindowPosition(windowRect.left, windowRect.top, windowRect.Width(), windowRect.Height());
@@ -11420,6 +11423,7 @@ void CMainFrame::OpenSetupStatusBar()
         EndEnumFilters;
 
         m_wndStatusBar.SetStatusBitmap(id);
+        m_bHasAudio = (id != IDB_AUDIOTYPE_NOAUDIO);
     }
 }
 

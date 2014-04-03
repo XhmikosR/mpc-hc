@@ -422,6 +422,7 @@ protected:
     bool m_bPausedForAutochangeMonitorMode;
 
     bool m_fAudioOnly;
+    bool m_bHasAudio;
     CString m_LastOpenBDPath;
     CAutoPtr<OpenMediaData> m_lastOMD;
 

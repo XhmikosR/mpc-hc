@@ -666,9 +666,10 @@ bool CWebClientSocket::OnControls(CStringA& hdr, CStringA& body, CStringA& mime)
 
     CString playbackrate = _T("1"); // TODO
 
-    CString volumelevel, muted;
+    CString volumelevel, muted, hasAudio;
     volumelevel.Format(_T("%d"), m_pMainFrame->m_wndToolBar.m_volctrl.GetPos());
-    muted.Format(_T("%d"), m_pMainFrame->m_wndToolBar.Volume == -10000 ? 1 : 0);
+    muted.Format(_T("%d"), m_pMainFrame->m_wndToolBar.Volume == -10000);
+    hasAudio.Format(_T("%d"), m_pMainFrame->m_bHasAudio);
 
     CString reloadtime(_T("0")); // TODO
 
@@ -685,6 +686,7 @@ bool CWebClientSocket::OnControls(CStringA& hdr, CStringA& body, CStringA& mime)
     body.Replace("[durationstring]", UTF8(ReftimeToString2(m_pMainFrame->GetDur())));
     body.Replace("[volumelevel]", UTF8(volumelevel));
     body.Replace("[muted]", UTF8(muted));
+    body.Replace("[hasaudio]", UTF8(hasAudio));
     body.Replace("[playbackrate]", UTF8(playbackrate));
     body.Replace("[reloadtime]", UTF8(reloadtime));
 
@@ -723,9 +725,10 @@ bool CWebClientSocket::OnVariables(CStringA& hdr, CStringA& body, CStringA& mime
 
     CString playbackrate = _T("1"); // TODO
 
-    CString volumelevel, muted;
+    CString volumelevel, muted, hasAudio;
     volumelevel.Format(_T("%d"), m_pMainFrame->m_wndToolBar.m_volctrl.GetPos());
-    muted.Format(_T("%d"), m_pMainFrame->m_wndToolBar.Volume == -10000 ? 1 : 0);
+    muted.Format(_T("%d"), m_pMainFrame->m_wndToolBar.Volume == -10000);
+    hasAudio.Format(_T("%d"), m_pMainFrame->m_bHasAudio);
 
     CString reloadtime(_T("0")); // TODO
 
@@ -743,6 +746,7 @@ bool CWebClientSocket::OnVariables(CStringA& hdr, CStringA& body, CStringA& mime
     body.Replace("[durationstring]", UTF8(ReftimeToString2(m_pMainFrame->GetDur())));
     body.Replace("[volumelevel]", UTF8(volumelevel));
     body.Replace("[muted]", UTF8(muted));
+    body.Replace("[hasaudio]", UTF8(hasAudio));
     body.Replace("[playbackrate]", UTF8(playbackrate));
     body.Replace("[size]", UTF8(GetSize()));
     body.Replace("[reloadtime]", UTF8(reloadtime));
