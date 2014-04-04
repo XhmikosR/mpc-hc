@@ -288,7 +288,7 @@ if (eta === 0) {
     }
 }
 
-function controlsInit(_filePath, _curPos, _length, _state, _pbr, _eta, _volume, _muted) {
+function controlsInit(_filePath, _curPos, _length, _state, _pbr, _eta, _volume, _muted, _hasAudio) {
     "use strict";
     filePath = decodeURIComponent(_filePath);
     curPos = _curPos;
@@ -298,6 +298,7 @@ function controlsInit(_filePath, _curPos, _length, _state, _pbr, _eta, _volume, 
     eta = _eta;
     volume = _volume;
     muted = _muted;
+    hasAudio = _hasAudio;
 
     if (eta > 0) {
         setTimeout(function () {
