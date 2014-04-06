@@ -109,8 +109,52 @@ img {
 /* controls.html */
 td,
 th {
-  padding: 0;
+    padding: 0;
 }
+
+.table-bordered,
+.table-bordered th,
+.table-bordered td {
+    border: 1px solid black;
+}
+
+.table-space0-pad0 {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table-space0-pad4 {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table-space0-pad0 th,
+.table-space0-pad0 td {
+    padding: 0;
+}
+
+.table-space0-pad4 th,
+.table-space0-pad4 td,
+.table-space1-pad4 th,
+.table-space1-pad4 td {
+    padding: 4px;
+}
+
+.table-space1-pad4 {
+    border-collapse: separate;
+    border-spacing: 1px;
+}
+
+.table-no-border,
+.table-no-border th,
+.table-no-border td {
+    border: none;
+}
+
+.table-width100 {
+    width: 100%;
+}
+
 #slider {
     background: url(img/sliderback.png) no-repeat;
     width: 515px;

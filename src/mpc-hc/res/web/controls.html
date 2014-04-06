@@ -19,7 +19,7 @@
 </noscript>
 <div>
     <span>File Info</span>
-    <table border="1" cellspacing="1" cellpadding="4">
+    <table class="table-bordered table-space1-pad4">
         <tr>
             <td colspan="4">
                 Loaded file:
@@ -30,7 +30,7 @@
         <tr>
             <td>Status: [statestring]</td>
             <td>
-                <table>
+                <table class="table-no-border table-space1-pad4">
                     <tr>
                         <td id="time">[positionstring]</td>
                         <td>/</td>
@@ -50,6 +50,7 @@
     </table>
 </div>
 <br>
+
 <div>
     <form action="[commandpath]" method="post">
         <input type="hidden" name="[wmcname]" value="-1">
@@ -59,10 +60,10 @@
                 <strong>(position slider disabled)</strong>
             </span>
         </noscript>
-        <table border="1" cellspacing="1" cellpadding="4">
+        <table class="table-bordered table-space1-pad4">
             <tr>
                 <td>
-                    <table id="slider" border="0" cellspacing="0" cellpadding="0">
+                    <table id="slider" class="table-space0-pad0 table-no-border">
                         <tr>
                             <td><img id="c1" width="1" height="1" alt="1pix" src="img/1pix.png"></td>
                             <td><img id="c2" width="15" height="20" alt="slidergrip" src="img/slidergrip.png"></td>
@@ -87,11 +88,12 @@
     </form>
 </div>
 <br>
+
 <div>
-    <table border="0" cellspacing="0" cellpadding="0">
+    <table class="table-space0-pad0">
         <tr>
             <td>Playback control
-                <table border="1" cellspacing="1" cellpadding="4">
+                <table class="table-bordered table-space1-pad4">
                     <tr>
                         <td>
                             <form action="[commandpath]" method="post">
@@ -151,9 +153,9 @@
                         </td>
                     </tr>
                 </table>
-                <td width="20">&nbsp;</td>
+                <td>&nbsp;</td>
                 <td>Seek
-                    <table border="1" cellspacing="1" cellpadding="4">
+                    <table class="table-bordered table-space1-pad4">
                         <tr>
                             <td>
                                 <form action="[commandpath]" method="post">
@@ -211,13 +213,13 @@
 </div>
 <br>
 <div>
-    <table border="0" cellspacing="0" cellpadding="0">
+    <table class="table-space0-pad0">
         <tr>
             <td>Volume control
                 <noscript>
                     <strong> (integer between 0 &amp; 100)</strong>
                 </noscript>
-                <table border="1" cellspacing="1" cellpadding="4">
+                <table class="table-bordered table-space1-pad4">
                     <tr>
                         <td id="muted" class="text-center"></td>
                         <td>
@@ -227,10 +229,10 @@
                             </form>
                         </td>
                         <td>
-                            <table border="0" cellspacing="0" cellpadding="0">
+                            <table class="table-space0-pad0">
                                 <tr>
                                     <td>
-                                        <table id="v" border="0" cellspacing="0" cellpadding="0">
+                                        <table id="v" class="table-space0-pad0">
                                             <tr>
                                                 <td><img id="v1" width="1" height="1" alt="1pix" src="img/1pix.png"></td>
                                                 <td><img id="v2" width="10" height="20" alt="vbs" src="img/vbs.png"></td>
@@ -267,9 +269,9 @@
                     </tr>
                 </table>
             </td>
-            <td width="20">&nbsp;</td>
+            <td>&nbsp;</td>
             <td>Playlist
-                <table border="1" cellspacing="1" cellpadding="4">
+                <table class="table-bordered table-space1-pad4">
                     <tr>
                         <td>
                             <form action="[commandpath]" method="post">
@@ -285,9 +287,9 @@
                         </td>
                     </tr>
                 </table>
-                <td width="20">&nbsp;</td>
+                <td>&nbsp;</td>
                 <td>Panic Button
-                    <table border="1" cellspacing="1" cellpadding="4">
+                    <table class="table-bordered table-space1-pad4">
                         <tr>
                             <td>
                                 <form action="[commandpath]" method="post">
@@ -298,9 +300,9 @@
                         </tr>
                     </table>
                 </td>
-                <td width="20">&nbsp;</td>
+                <td>&nbsp;</td>
                 <td>Audio Delay
-                    <table border="1" cellspacing="1" cellpadding="4">
+                    <table class="table-bordered table-space1-pad4">
                         <tr>
                             <td>
                                 <form action="[commandpath]" method="post">
@@ -322,13 +324,13 @@
 </div>
 <br>
 <div>
-    <table border="0" cellspacing="0" cellpadding="0">
+    <table class="table-space0-pad0">
         <tr>
             <td>Pan&amp;Scan Move
-                <table border="0" cellspacing="0" cellpadding="0">
+                <table class="table-space0-pad0">
                     <tr>
                         <td>
-                            <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                            <table class="table-bordered table-space1-pad4 table-width100">
                                 <tr>
                                     <td class="text-center">
                                         <form action="[commandpath]" method="post">
@@ -340,7 +342,7 @@
                             </table>
                         </td>
                         <td>
-                            <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                            <table class="table-bordered table-space1-pad4 table-width100">
                                 <tr>
                                     <td class="text-center">
                                         <form action="[commandpath]" method="post">
@@ -352,7 +354,7 @@
                             </table>
                         </td>
                         <td>
-                            <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                            <table class="table-bordered table-space1-pad4 table-width100">
                                 <tr>
                                     <td class="text-center">
                                         <form action="[commandpath]" method="post">
@@ -366,7 +368,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                            <table class="table-bordered table-space1-pad4 table-width100">
                                 <tr>
                                     <td class="text-center">
                                         <form action="[commandpath]" method="post">
@@ -378,7 +380,7 @@
                             </table>
                         </td>
                         <td>
-                            <table border="1" cellspacing="1" cellpadding="4">
+                            <table class="table-bordered table-space1-pad4">
                                 <tr>
                                     <td>
                                         <form action="[commandpath]" method="post">
@@ -390,7 +392,7 @@
                             </table>
                         </td>
                         <td>
-                            <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                            <table class="table-bordered table-space1-pad4 table-width100">
                                 <tr>
                                     <td class="text-center">
                                         <form action="[commandpath]" method="post">
@@ -404,7 +406,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <table border="1" cellspacing="1" cellpadding="4">
+                            <table class="table-bordered table-space1-pad4">
                                 <tr>
                                     <td>
                                         <form action="[commandpath]" method="post">
@@ -416,7 +418,7 @@
                             </table>
                         </td>
                         <td>
-                            <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                            <table class="table-bordered table-space1-pad4 table-width100">
                                 <tr>
                                     <td class="text-center">
                                         <form action="[commandpath]" method="post">
@@ -428,7 +430,7 @@
                             </table>
                         </td>
                         <td>
-                            <table border="1" cellspacing="1" cellpadding="4">
+                            <table class="table-bordered table-space1-pad4">
                                 <tr>
                                     <td>
                                         <form action="[commandpath]" method="post">
@@ -441,13 +443,13 @@
                         </td>
                     </tr>
                 </table>
-                <td width="30">&nbsp;</td>
+                <td>&nbsp;</td>
                 <td>Pan&amp;Scan Size
-                    <table border="0" cellspacing="0" cellpadding="0">
+                    <table class="table-space0-pad0">
                         <tr>
                             <td>&nbsp;</td>
                             <td>
-                                <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                                <table class="table-bordered table-space1-pad4 table-width100">
                                     <tr>
                                         <td class="text-center">
                                             <form action="[commandpath]" method="post">
@@ -459,7 +461,7 @@
                                 </table>
                             </td>
                             <td>
-                                <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                                <table class="table-bordered table-space1-pad4 table-width100">
                                     <tr>
                                         <td class="text-center">
                                             <form action="[commandpath]" method="post">
@@ -473,7 +475,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <table border="1" cellspacing="1" cellpadding="4">
+                                <table class="table-bordered table-space1-pad4">
                                     <tr>
                                         <td>
                                             <form action="[commandpath]" method="post">
@@ -485,7 +487,7 @@
                                 </table>
                             </td>
                             <td>
-                                <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                                <table class="table-bordered table-space1-pad4 table-width100">
                                     <tr>
                                         <td class="text-center">
                                             <form action="[commandpath]" method="post">
@@ -497,7 +499,7 @@
                                 </table>
                             </td>
                             <td>
-                                <table border="1" cellspacing="1" cellpadding="4">
+                                <table class="table-bordered table-space1-pad4">
                                     <tr>
                                         <td>
                                             <form action="[commandpath]" method="post">
@@ -509,7 +511,7 @@
                                 </table>
                             </td>
                             <td>
-                                <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                                <table class="table-bordered table-space1-pad4 table-width100">
                                     <tr>
                                         <td class="text-center">
                                             <form action="[commandpath]" method="post">
@@ -521,7 +523,7 @@
                                 </table>
                             </td>
                             <td>
-                                <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                                <table class="table-bordered table-space1-pad4 table-width100">
                                     <tr>
                                         <td class="text-center">
                                             <form action="[commandpath]" method="post">
@@ -532,21 +534,19 @@
                                     </tr>
                                 </table>
                             </td>
-                            </tr>
                     </table>
                 </td>
-                </tr>
     </table>
 </div>
 <br>
 <div>
-    <table border="0" cellspacing="0" cellpadding="0">
+    <table class="table-space0-pad0">
         <tr>
             <td>Video Frame
-                <table border="0" cellspacing="0" cellpadding="0">
+                <table class="table-space0-pad0">
                     <tr>
                         <td>
-                            <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                            <table class="table-bordered table-space1-pad4 table-width100">
                                 <tr>
                                     <td class="text-center">
                                         <form action="[commandpath]" method="post">
@@ -558,7 +558,7 @@
                             </table>
                         </td>
                         <td>
-                            <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                            <table class="table-bordered table-space1-pad4 table-width100">
                                 <tr>
                                     <td class="text-center">
                                         <form action="[commandpath]" method="post">
@@ -572,7 +572,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                            <table class="table-bordered table-space1-pad4 table-width100">
                                 <tr>
                                     <td class="text-center">
                                         <form action="[commandpath]" method="post">
@@ -584,7 +584,7 @@
                             </table>
                         </td>
                         <td>
-                            <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                            <table class="table-bordered table-space1-pad4 table-width100">
                                 <tr>
                                     <td class="text-center">
                                         <form action="[commandpath]" method="post">
@@ -598,7 +598,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                            <table class="table-bordered table-space1-pad4 table-width100">
                                 <tr>
                                     <td class="text-center">
                                         <form action="[commandpath]" method="post">
@@ -610,7 +610,7 @@
                             </table>
                         </td>
                         <td>
-                            <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                            <table class="table-bordered table-space1-pad4 table-width100">
                                 <tr>
                                     <td class="text-center">
                                         <form action="[commandpath]" method="post">
@@ -623,13 +623,13 @@
                         </td>
                     </tr>
                 </table>
-                <td width="30"></td>
+                <td>&nbsp;</td>
                 <td>DVD Menu Controler
-                    <table border="0" cellspacing="0" cellpadding="0">
+                    <table class="table-space0-pad0">
                         <tr>
                             <td>&nbsp;</td>
                             <td>
-                                <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                                <table class="table-bordered table-space1-pad4 table-width100">
                                     <tr>
                                         <td class="text-center">
                                             <form action="[commandpath]" method="post">
@@ -644,7 +644,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                                <table class="table-bordered table-space1-pad4 table-width100">
                                     <tr>
                                         <td class="text-center">
                                             <form action="[commandpath]" method="post">
@@ -656,7 +656,7 @@
                                 </table>
                             </td>
                             <td>
-                                <table border="1" cellspacing="1" cellpadding="4">
+                                <table class="table-bordered table-space1-pad4">
                                     <tr>
                                         <td>
                                             <form action="[commandpath]" method="post">
@@ -668,7 +668,7 @@
                                 </table>
                             </td>
                             <td>
-                                <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                                <table class="table-bordered table-space1-pad4 table-width100">
                                     <tr>
                                         <td class="text-center">
                                             <form action="[commandpath]" method="post">
@@ -682,7 +682,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <table border="1" cellspacing="1" cellpadding="4">
+                                <table class="table-bordered table-space1-pad4">
                                     <tr>
                                         <td>
                                             <form action="[commandpath]" method="post">
@@ -694,7 +694,7 @@
                                 </table>
                             </td>
                             <td>
-                                <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                                <table class="table-bordered table-space1-pad4 table-width100">
                                     <tr>
                                         <td class="text-center">
                                             <form action="[commandpath]" method="post">
@@ -706,7 +706,7 @@
                                 </table>
                             </td>
                             <td>
-                                <table border="1" cellspacing="1" cellpadding="4">
+                                <table class="table-bordered table-space1-pad4">
                                     <tr>
                                         <td>
                                             <form action="[commandpath]" method="post">
@@ -718,12 +718,12 @@
                                 </table>
                             </td>
                     </table>
-                    <td width="30">&nbsp;</td>
+                    <td>&nbsp;</td>
                     <td>Misc
-                        <table border="0" cellspacing="0" cellpadding="0">
+                        <table class="table-space0-pad0">
                             <tr>
                                 <td>
-                                    <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                                    <table class="table-bordered table-space1-pad4 table-width100">
                                         <tr>
                                             <td class="text-center">
                                                 <form action="[commandpath]" method="post">
@@ -735,7 +735,7 @@
                                     </table>
                                 </td>
                                 <td>
-                                    <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                                    <table class="table-bordered table-space1-pad4 table-width100">
                                         <tr>
                                             <td class="text-center">
                                                 <form action="[commandpath]" method="post">
@@ -747,7 +747,7 @@
                                     </table>
                                 </td>
                                 <td>
-                                    <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                                    <table class="table-bordered table-space1-pad4 table-width100">
                                         <tr>
                                             <td class="text-center">
                                                 <form action="[commandpath]" method="post">
@@ -761,7 +761,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                                    <table class="table-bordered table-space1-pad4 table-width100">
                                         <tr>
                                             <td class="text-center">
                                                 <form action="[commandpath]" method="post">
@@ -773,7 +773,7 @@
                                     </table>
                                 </td>
                                 <td>
-                                    <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                                    <table class="table-bordered table-space1-pad4 table-width100">
                                         <tr>
                                             <td class="text-center">
                                                 <form action="[commandpath]" method="post">
@@ -785,7 +785,7 @@
                                     </table>
                                 </td>
                                 <td>
-                                    <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                                    <table class="table-bordered table-space1-pad4 table-width100">
                                         <tr>
                                             <td class="text-center">
                                                 <form action="[commandpath]" method="post">
@@ -799,7 +799,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                                    <table class="table-bordered table-space1-pad4 table-width100">
                                         <tr>
                                             <td class="text-center">
                                                 <form action="[commandpath]" method="post">
@@ -811,7 +811,7 @@
                                     </table>
                                 </td>
                                 <td>
-                                    <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                                    <table class="table-bordered table-space1-pad4 table-width100">
                                         <tr>
                                             <td class="text-center">
                                                 <form action="[commandpath]" method="post">
@@ -823,7 +823,7 @@
                                     </table>
                                 </td>
                                 <td>
-                                    <table border="1" cellspacing="1" cellpadding="4" width="100%">
+                                    <table class="table-bordered table-space1-pad4 table-width100">
                                         <tr>
                                             <td class="text-center">
                                                 <form action="[commandpath]" method="post">
@@ -841,10 +841,10 @@
 </div>
 <br>
 <div>
-    <table border="0" cellspacing="0" cellpadding="0">
+    <table class="table-space0-pad0">
         <tr>
             <td>Zoom control
-                <table border="1" cellspacing="1" cellpadding="4">
+                <table class="table-bordered table-space1-pad4">
                     <tr>
                         <td>
                             <form action="[commandpath]" method="post">
@@ -867,9 +867,9 @@
                     </tr>
                 </table>
             </td>
-            <td width="20">&nbsp;</td>
+            <td>&nbsp;</td>
             <td>Fullscreen control
-                <table border="1" cellspacing="1" cellpadding="4">
+                <table class="table-bordered table-space1-pad4">
                     <tr>
                         <td>
                             <form action="[commandpath]" method="post">
@@ -891,10 +891,10 @@
 </div>
 <br>
 <div>
-    <table border="0" cellspacing="0" cellpadding="0">
+    <table class="table-space0-pad0">
         <tr>
             <td>Player views
-                <table border="1" cellspacing="1" cellpadding="4">
+                <table class="table-bordered table-space1-pad4">
                     <tr>
                         <td>
                             <form action="[commandpath]" method="post">
@@ -917,9 +917,9 @@
                     </tr>
                 </table>
             </td>
-            <td width="20"></td>
+            <td>&nbsp;</td>
             <td>Detachable Controls
-                <table border="1" cellspacing="1" cellpadding="4">
+                <table class="table-bordered table-space1-pad4">
                     <tr>
                         <td>
                             <form action="[commandpath]" method="post">
@@ -944,7 +944,7 @@
             </td>
         </tr>
     </table>
-    <table border="1" cellspacing="1" cellpadding="4">
+    <table class="table-bordered table-space1-pad4">
         <tr>
             <td>
                 <form action="[commandpath]" method="post">
@@ -987,10 +987,10 @@
 </div>
 <br>
 <div>
-    <table border="0" cellspacing="0" cellpadding="0">
+    <table class="table-space0-pad0">
         <tr>
             <td>Generic Audio/Subtitles
-                <table border="1" cellspacing="1" cellpadding="4">
+                <table class="table-bordered table-space1-pad4">
                     <tr>
                         <td>
                             <form action="[commandpath]" method="post">
@@ -1020,10 +1020,10 @@
                     </tr>
                 </table>
             </td>
-            <td width="20">&nbsp;</td>
+            <td>&nbsp;</td>
             <td>
                 <!-- p TODO -->OGM Audio/Subtitles
-                <table border="1" cellspacing="1" cellpadding="4">
+                <table class="table-bordered table-space1-pad4">
                     <tr>
                         <td>
                             <form action="[commandpath]" method="post">
@@ -1058,10 +1058,10 @@
 </div>
 <br>
 <div>
-    <table border="0" cellspacing="0" cellpadding="0">
+    <table class="table-space0-pad0">
         <tr>
             <td>Subtitles
-                <table border="1" cellspacing="1" cellpadding="4">
+                <table class="table-bordered table-space1-pad4">
                     <tr>
                         <td>
                             <form action="[commandpath]" method="post">
@@ -1078,9 +1078,9 @@
                     </tr>
                 </table>
             </td>
-            <td width="20">&nbsp;</td>
+            <td>&nbsp;</td>
             <td>DVD Angles/Audio/Subtitles
-                    <table border="1" cellspacing="1" cellpadding="4">
+                    <table class="table-bordered table-space1-pad4">
                     <tr>
                         <td>
                             <form action="[commandpath]" method="post">
@@ -1128,10 +1128,10 @@
 </div>
 <br>
 <div>
-    <table border="0" cellspacing="0" cellpadding="0">
+    <table class="table-space0-pad0">
         <tr>
             <td>DVD Menus
-                <table border="1" cellspacing="1" cellpadding="4">
+                <table class="table-bordered table-space1-pad4">
                     <tr>
                         <td>
                             <form action="[commandpath]" method="post">
@@ -1172,9 +1172,9 @@
                     </tr>
                 </table>
             </td>
-            <td width="20">&nbsp;</td>
+            <td>&nbsp;</td>
             <td>MPC-HC's Menus
-                <table border="1" cellspacing="1" cellpadding="4">
+                <table class="table-bordered table-space1-pad4">
                     <tr>
                         <td>
                             <form action="[commandpath]" method="post">
@@ -1203,7 +1203,7 @@
 <br>
 <div>
     <span>Always On Top</span>
-    <table border="1" cellspacing="1" cellpadding="4">
+    <table class="table-bordered table-space1-pad4">
         <tr>
             <td>
                 <form action="[commandpath]" method="post">
