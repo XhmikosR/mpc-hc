@@ -17,7 +17,7 @@ REM You should have received a copy of the GNU General Public License
 REM along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-SETLOCAL
+SETLOCAL DisableDelayedExpansion
 CD /D %~dp0
 
 REM pre-build checks
@@ -41,6 +41,7 @@ SET ARGBC=0
 SET ARGC=0
 SET ARGCOMP=0
 SET ARGPL=0
+SET STABLE=False
 SET INPUT=0
 SET VALID=0
 
@@ -59,7 +60,7 @@ FOR %%G IN (%ARG%) DO (
   IF /I "%%G" == "x86"          SET "PPLATFORM=Win32"    & SET /A ARGPL+=1
   IF /I "%%G" == "x64"          SET "PPLATFORM=x64"      & SET /A ARGPL+=1
   IF /I "%%G" == "All"          SET "CONFIG=All"         & SET /A ARGC+=1
-  IF /I "%%G" == "Main"         SET "CONFIG=Main"        & SET /A ARGC+=1  & SET "NO_INST=True" & SET "NO_ZIP=True" 
+  IF /I "%%G" == "Main"         SET "CONFIG=Main"        & SET /A ARGC+=1  & SET "NO_INST=True" & SET "NO_ZIP=True"
   IF /I "%%G" == "Filters"      SET "CONFIG=Filters"     & SET /A ARGC+=1  & SET "NO_INST=True" & SET "NO_LITE=True"
   IF /I "%%G" == "Filter"       SET "CONFIG=Filters"     & SET /A ARGC+=1  & SET "NO_INST=True" & SET "NO_LITE=True"
   IF /I "%%G" == "API"          SET "CONFIG=API"         & SET /A ARGC+=1  & SET "NO_INST=True" & SET "NO_ZIP=True" & SET "NO_LITE=True"
@@ -80,6 +81,7 @@ FOR %%G IN (%ARG%) DO (
   IF /I "%%G" == "Silent"       SET "SILENT=True"        & SET /A VALID+=1
   IF /I "%%G" == "Nocolors"     SET "NOCOLORS=True"      & SET /A VALID+=1
   IF /I "%%G" == "Analyze"      SET "ANALYZE=True"       & SET /A VALID+=1
+  IF /I "%%G" == "Stable"       SET "STABLE=True"        & SET /A VALID+=1
 )
 
 FOR %%G IN (%*) DO SET /A INPUT+=1
@@ -107,6 +109,97 @@ IF EXIST "%~dp0signinfo.txt" (
   IF /I "%INSTALLER%" == "True" SET "SIGN=True"
   IF /I "%ZIP%" == "True"       SET "SIGN=True"
 )
+
+
+:Stable
+IF /I "%STABLE%" NEQ "True" GOTO Start
+CALL :SubDetectGitPath
+IF NOT DEFINED GIT (
+  CALL :SubMsg "ERROR" "GIT wasn't found"
+  EXIT /B
+)
+
+ECHO.
+CHOICE /M "Do you want to start the release process? Push all your changes to the remote branch before. All local changes and commits will be removed."
+IF %ERRORLEVEL% NEQ 1 EXIT /B
+
+SET /P "_BRANCH=Please enter the branch name to release [upstream/master] " || SET "_BRANCH=upstream/master"
+FOR /F "tokens=1-2 delims=/" %%A IN ("%_BRANCH%") DO (
+  SET "REPO=%%A" & SET "BRANCH=%%B"
+)
+
+%GIT% fetch %REPO%
+IF %ERRORLEVEL% NEQ 0 (
+  CALL :SubMsg "ERROR" "`%GIT% fetch %REPO%` - failed!"
+  EXIT /B
+)
+
+%GIT% fetch --tags %REPO%
+IF %ERRORLEVEL% NEQ 0 (
+  CALL :SubMsg "ERROR" "`%GIT% fetch --tags %REPO%` - failed!"
+  EXIT /B
+)
+
+%GIT% checkout %BRANCH%
+IF %ERRORLEVEL% NEQ 0 (
+  CALL :SubMsg "ERROR" "`%GIT% checkout %BRANCH%` - failed!"
+  EXIT /B
+)
+
+%GIT% reset --hard %REPO%/%BRANCH%
+IF %ERRORLEVEL% NEQ 0 (
+  CALL :SubMsg "ERROR" "`%GIT% reset --hard %REPO%/%BRANCH%` - failed!"
+  EXIT /B
+)
+
+ECHO.
+SET /P "VERSION=Please enter version number [0.0.0] " || SET "VERSION=0.0.0"
+CALL :SubSetVersion %VERSION%
+
+ECHO.
+ECHO Please edit 'docs/Changelog.txt' and press any key to commit the changes...
+PAUSE > NUL
+%GIT% add -u
+IF %ERRORLEVEL% NEQ 0 (
+  CALL :SubMsg "ERROR" "`%GIT% add -u` - failed!"
+  EXIT /B
+)
+
+%GIT% commit -m "Update files for v%VERSION% release."
+IF %ERRORLEVEL% NEQ 0 (
+  CALL :SubMsg "ERROR" "`%GIT% commit -m "Update files for v%VERSION% release."` - failed!"
+  EXIT /B
+)
+
+%GIT% tag -a %VERSION% -m "Tag v%VERSION%"
+IF %ERRORLEVEL% NEQ 0 (
+  CALL :SubMsg "ERROR" "`%GIT% tag -a %VERSION% -m "Tag v%VERSION%"` - failed!"
+  EXIT /B
+)
+
+ECHO.
+CHOICE /M "Do you want to push to remote now?"
+IF %ERRORLEVEL% == 1 (
+  %GIT% push %REPO% --tags %BRANCH%
+  IF %ERRORLEVEL% NEQ 0 (
+    CALL :SubMsg "ERROR" "`%GIT% push %REPO% --tags %BRANCH%` - failed!"
+    EXIT /B
+  )
+)
+
+ECHO.
+ECHO Preparing release v%VERSION% from %REPO%/%BRANCH%
+CALL "build.bat" Clean All Both Release
+IF %ERRORLEVEL% NEQ 0 EXIT /B
+
+REM Default release options
+SET "BUILDTYPE=Build"
+SET "PPLATFORM=Both"
+SET "CONFIG=All"
+SET "BUILDCFG=Release"
+SET "COMPILER=VS2013"
+SET "INSTALLER=True"
+SET "ZIP=True"
 
 
 :Start
@@ -355,7 +448,7 @@ IF /I "%~1" == "x64" (
 IF DEFINED MPCHC_LITE (
   SET MPCHC_INNO_DEF=%MPCHC_INNO_DEF% /DMPCHC_LITE
   SET MPCHC_COPY_DX_DLL_ARGS=%MPCHC_COPY_DX_DLL_ARGS% " Lite"
-) 
+)
 
 CALL :SubCopyDXDll %MPCHC_COPY_DX_DLL_ARGS%
 
@@ -419,8 +512,9 @@ IF EXIST "%PCKG_NAME%"        RD /Q /S "%PCKG_NAME%"
 SET "PDB_FILES=*.pdb"
 IF NOT DEFINED MPCHC_LITE (SET "PDB_FILES=%PDB_FILES% %LAVFILTERSDIR%\*.pdb")
 
-REM Compress the pdb file for mpc-hc only
-IF /I "%NAME%" == "MPC-HC" (
+IF NOT DEFINED RELEASE IF /I "%NAME%" NEQ "MPC-HC" SET "SKIP_PDB=True"
+
+IF NOT DEFINED SKIP_PDB (
   PUSHD "%VS_OUT_DIR%"
   TITLE Creating archive %PCKG_NAME%.pdb.7z...
   START "7z" /B /WAIT "%SEVENZIP%" a -t7z "%PCKG_NAME%.pdb.7z" %PDB_FILES% -m0=LZMA -mx9 -ms=on
@@ -473,6 +567,14 @@ START "7z" /B /WAIT "%SEVENZIP%" a -t7z "%PCKG_NAME%.7z" "%PCKG_NAME%"^
 IF %ERRORLEVEL% NEQ 0 CALL :SubMsg "ERROR" "Unable to create %PCKG_NAME%.7z!" & EXIT /B
 CALL :SubMsg "INFO" "%PCKG_NAME%.7z successfully created"
 
+IF DEFINED STABLE (
+  TITLE Creating archive %PCKG_NAME%.zip...
+  IF EXIST "%PCKG_NAME%.zip" DEL "%PCKG_NAME%.zip"
+  START "7z" /B /WAIT "%SEVENZIP%" a -tzip "%PCKG_NAME%.zip" "%PCKG_NAME%"
+  IF %ERRORLEVEL% NEQ 0 CALL :SubMsg "ERROR" "Unable to create %PCKG_NAME%.zip!" & EXIT /B
+  CALL :SubMsg "INFO" "%PCKG_NAME%.zip successfully created"
+)
+
 IF EXIST "%PCKG_NAME%" RD /Q /S "%PCKG_NAME%"
 
 POPD
@@ -506,6 +608,63 @@ IF "%MPCHC_NIGHTLY%" NEQ "0" (
 )
 EXIT /B
 
+:SubSetVersion
+FOR /F "tokens=1-3 delims=." %%A IN ("%~1") DO (
+  SET "VERSION_MAJOR=%%A" & SET "VERSION_MINOR=%%B" & SET "VERSION_PATCH=%%C"
+)
+SET "VERSION=%VERSION_MAJOR%.%VERSION_MINOR%.%VERSION_PATCH%"
+
+CALL :SubGetVersion
+
+SETLOCAL EnableDelayedExpansion
+FOR /F "tokens=*" %%A IN ('FINDSTR /R /C:"define MPC_VERSION_MAJOR" "include\version.h"') DO (
+  SET LINE_ORG=%%A
+  SET LINE_SUB=!LINE_ORG:%MPC_VERSION_MAJOR%=%VERSION_MAJOR%!
+  CALL :SubReplaceInFile "!LINE_ORG!" "!LINE_SUB!" "include\version.h"
+)
+
+FOR /F "tokens=*" %%A IN ('FINDSTR /R /C:"define MPC_VERSION_MINOR" "include\version.h"') DO (
+  SET LINE_ORG=%%A
+  SET LINE_SUB=!LINE_ORG:%MPC_VERSION_MINOR%=%VERSION_MINOR%!
+  CALL :SubReplaceInFile "!LINE_ORG!" "!LINE_SUB!" "include\version.h"
+)
+
+FOR /F "tokens=*" %%A IN ('FINDSTR /R /C:"define MPC_VERSION_PATCH" "include\version.h"') DO (
+  SET LINE_ORG=%%A
+  SET LINE_SUB=!LINE_ORG:%MPC_VERSION_PATCH%=%VERSION_PATCH%!
+  CALL :SubReplaceInFile "!LINE_ORG!" "!LINE_SUB!" "include\version.h"
+)
+
+ENDLOCAL
+EXIT /B
+
+
+:SubReplaceInFile
+SET "FILE=%~3"
+SET "FILE_NEW=%~3_new"
+
+SET "ORG=%~1"
+SET "SUB=%~2"
+IF DEFINED ORG SET "ORG=%ORG:""="%"
+IF DEFINED SUB SET "SUB=%SUB:""="%"
+
+SETLOCAL DisableDelayedExpansion
+IF "%~1"=="" FINDSTR "^::" "%~f0" & ENDLOCAL & EXIT /B
+FOR /F "delims=" %%A IN ('"FINDSTR /n ^^ %FILE%"') DO (
+  SET "LINE=%%A"
+  SETLOCAL EnableDelayedExpansion
+  SET "LINE=!LINE:*:=!"
+  IF DEFINED LINE (
+    SET "LINE=!LINE:%ORG%=%SUB%!"
+    (ECHO(!LINE!)>> %FILE_NEW%
+  ) ELSE ECHO(>> %FILE_NEW%
+  ENDLOCAL
+)
+
+MOVE %FILE_NEW% %FILE% > NUL
+ENDLOCAL
+EXIT /B
+
 
 :SubDetectInnoSetup
 FOR /F "tokens=5*" %%A IN (
@@ -527,11 +686,18 @@ FOR /F "tokens=2*" %%A IN (
 EXIT /B
 
 
+:SubDetectGitPath
+SET "PATH=%PATH%;%MPCHC_GIT%"
+FOR %%G IN (git.exe) DO (SET "GIT_PATH=%%~$PATH:G")
+IF EXIST "%GIT_PATH%" (SET "GIT="%GIT_PATH%"")
+EXIT /B
+
+
 :ShowHelp
 TITLE %~nx0 Help
 ECHO.
 ECHO Usage:
-ECHO %~nx0 [Clean^|Build^|Rebuild] [x86^|x64^|Both] [Main^|Resources^|MPCHC^|IconLib^|Translations^|Filters^|API^|All] [Debug^|Release] [Lite] [Packages^|Installer^|7z] [LAVFilters] [VS2013] [Analyze]
+ECHO %~nx0 [Clean^|Build^|Rebuild] [x86^|x64^|Both] [Main^|Resources^|MPCHC^|IconLib^|Translations^|Filters^|API^|All] [Debug^|Release] [Lite] [Packages^|Installer^|7z] [LAVFilters] [VS2013] [Analyze] [Stable]
 ECHO.
 ECHO Notes: You can also prefix the commands with "-", "--" or "/".
 ECHO        Debug only applies to mpc-hc.sln.

@@ -2,7 +2,7 @@ Here is a quick how-to release a new stable build:
 
 1) Update "thirdparty/versions.txt" and the version/release date in "Changelog.txt"
 2) Commit the changes
-3) Create a git tag for the new release: `git tag -a 1.7.5 -m "Tag v1.7.5"`
+3) Create a git tag for the new release: `git tag -a X.Y.Z -m "Tag vX.Y.Z"`
 4) Make sure you have a clean source tree, no modified files, or unpushed commits
 5) Compile MPC-HC and the standalone filters:
    a. CALL "build.bat" Clean All Both Release
@@ -12,3 +12,5 @@ Here is a quick how-to release a new stable build:
    (upload the PDB files too, use 7zip for creating the 7z packages)
 8) Update the website with the new download links, changelog and version.txt with
    the new version number
+
+Alternatively you can use "build.bat /Stable" command which will guide you through the release process.
