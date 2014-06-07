@@ -128,25 +128,25 @@ FOR /F "tokens=1-2 delims=/" %%A IN ("%_BRANCH%") DO (
   SET "REPO=%%A" & SET "BRANCH=%%B"
 )
 
-%GIT% fetch %REPO%
+"%GIT%" fetch %REPO%
 IF %ERRORLEVEL% NEQ 0 (
   CALL :SubMsg "ERROR" "`%GIT% fetch %REPO%` - failed!"
   EXIT /B
 )
 
-%GIT% fetch --tags %REPO%
+"%GIT%" fetch --tags %REPO%
 IF %ERRORLEVEL% NEQ 0 (
   CALL :SubMsg "ERROR" "`%GIT% fetch --tags %REPO%` - failed!"
   EXIT /B
 )
 
-%GIT% checkout %BRANCH%
+"%GIT%" checkout %BRANCH%
 IF %ERRORLEVEL% NEQ 0 (
   CALL :SubMsg "ERROR" "`%GIT% checkout %BRANCH%` - failed!"
   EXIT /B
 )
 
-%GIT% reset --hard %REPO%/%BRANCH%
+"%GIT%" reset --hard %REPO%/%BRANCH%
 IF %ERRORLEVEL% NEQ 0 (
   CALL :SubMsg "ERROR" "`%GIT% reset --hard %REPO%/%BRANCH%` - failed!"
   EXIT /B
@@ -159,19 +159,19 @@ CALL :SubSetVersion %VERSION%
 ECHO.
 ECHO Please edit 'docs/Changelog.txt' and press any key to commit the changes...
 PAUSE > NUL
-%GIT% add -u
+"%GIT%" add -u
 IF %ERRORLEVEL% NEQ 0 (
   CALL :SubMsg "ERROR" "`%GIT% add -u` - failed!"
   EXIT /B
 )
 
-%GIT% commit -m "Update files for v%VERSION% release."
+"%GIT%" commit -m "Update files for v%VERSION% release."
 IF %ERRORLEVEL% NEQ 0 (
   CALL :SubMsg "ERROR" "`%GIT% commit -m "Update files for v%VERSION% release."` - failed!"
   EXIT /B
 )
 
-%GIT% tag -a %VERSION% -m "Tag v%VERSION%"
+"%GIT%" tag -a %VERSION% -m "Tag v%VERSION%"
 IF %ERRORLEVEL% NEQ 0 (
   CALL :SubMsg "ERROR" "`%GIT% tag -a %VERSION% -m "Tag v%VERSION%"` - failed!"
   EXIT /B
@@ -180,7 +180,7 @@ IF %ERRORLEVEL% NEQ 0 (
 ECHO.
 CHOICE /M "Do you want to push to remote now?"
 IF %ERRORLEVEL% == 1 (
-  %GIT% push %REPO% --tags %BRANCH%
+  "%GIT%" push %REPO% --tags %BRANCH%
   IF %ERRORLEVEL% NEQ 0 (
     CALL :SubMsg "ERROR" "`%GIT% push %REPO% --tags %BRANCH%` - failed!"
     EXIT /B
@@ -689,7 +689,7 @@ EXIT /B
 :SubDetectGitPath
 SET "PATH=%PATH%;%MPCHC_GIT%"
 FOR %%G IN (git.exe) DO (SET "GIT_PATH=%%~$PATH:G")
-IF EXIST "%GIT_PATH%" (SET "GIT="%GIT_PATH%"")
+IF EXIST "%GIT_PATH%" (SET "GIT=%GIT_PATH%")
 EXIT /B
 
 
