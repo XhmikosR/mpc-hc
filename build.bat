@@ -159,12 +159,15 @@ FOR /F "tokens=1-3 delims=." %%A IN ("%VERSION%") DO (
 )
 SET "VERSION=%VERSION_MAJOR%.%VERSION_MINOR%.%VERSION_PATCH%"
 
-sed -b -i '/\^#define MPC_VERSION_MAJOR/s/[0-9]\+/%VERSION_MAJOR%/' include/version.h
+sed -b '/\^#define MPC_VERSION_MAJOR/s/[0-9]\+/%VERSION_MAJOR%/' include/version.h > include\version.h2
 IF %ERRORLEVEL% NEQ 0 SET "FAIL=True"
-sed -b -i '/\^#define MPC_VERSION_MINOR/s/[0-9]\+/%VERSION_MINOR%/' include/version.h
+MOVE /Y include\version.h2 include\version.h
+sed -b '/\^#define MPC_VERSION_MINOR/s/[0-9]\+/%VERSION_MINOR%/' include/version.h > include\version.h2
 IF %ERRORLEVEL% NEQ 0 SET "FAIL=True"
-sed -b -i '/\^#define MPC_VERSION_PATCH/s/[0-9]\+/%VERSION_PATCH%/' include/version.h
+MOVE /Y include\version.h2 include\version.h
+sed -b '/\^#define MPC_VERSION_PATCH/s/[0-9]\+/%VERSION_PATCH%/' include/version.h > include\version.h2
 IF %ERRORLEVEL% NEQ 0 SET "FAIL=True"
+MOVE /Y include\version.h2 include\version.h
 
 IF DEFINED FAIL (
   ECHO.
