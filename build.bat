@@ -17,7 +17,7 @@ REM You should have received a copy of the GNU General Public License
 REM along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-SETLOCAL
+SETLOCAL DisableDelayedExpansion
 CD /D %~dp0
 
 REM pre-build checks
@@ -154,27 +154,7 @@ IF %ERRORLEVEL% NEQ 0 (
 
 ECHO.
 SET /P "VERSION=Please enter version number [0.0.0] " || SET "VERSION=0.0.0"
-FOR /F "tokens=1-3 delims=." %%A IN ("%VERSION%") DO (
-  SET "VERSION_MAJOR=%%A" & SET "VERSION_MINOR=%%B" & SET "VERSION_PATCH=%%C"
-)
-SET "VERSION=%VERSION_MAJOR%.%VERSION_MINOR%.%VERSION_PATCH%"
-
-sed -b '/\^#define MPC_VERSION_MAJOR/s/[0-9]\+/%VERSION_MAJOR%/' include/version.h > include\version.h2
-IF %ERRORLEVEL% NEQ 0 SET "FAIL=True"
-MOVE /Y include\version.h2 include\version.h
-sed -b '/\^#define MPC_VERSION_MINOR/s/[0-9]\+/%VERSION_MINOR%/' include/version.h > include\version.h2
-IF %ERRORLEVEL% NEQ 0 SET "FAIL=True"
-MOVE /Y include\version.h2 include\version.h
-sed -b '/\^#define MPC_VERSION_PATCH/s/[0-9]\+/%VERSION_PATCH%/' include/version.h > include\version.h2
-IF %ERRORLEVEL% NEQ 0 SET "FAIL=True"
-MOVE /Y include\version.h2 include\version.h
-
-IF DEFINED FAIL (
-  ECHO.
-  ECHO `sed` failed to change version number in 'include/version.h'
-  ECHO Please edit 'include/version.h' manually.
-  PAUSE
-)
+CALL :SubSetVersion %VERSION%
 
 ECHO.
 ECHO Please edit 'docs/Changelog.txt' and press any key to commit the changes...
@@ -626,6 +606,63 @@ IF "%MPCHC_NIGHTLY%" NEQ "0" (
 ) ELSE (
   SET "MPCHC_VER=%MPC_VERSION_MAJOR%.%MPC_VERSION_MINOR%.%MPC_VERSION_PATCH%"
 )
+EXIT /B
+
+:SubSetVersion
+FOR /F "tokens=1-3 delims=." %%A IN ("%~1") DO (
+  SET "VERSION_MAJOR=%%A" & SET "VERSION_MINOR=%%B" & SET "VERSION_PATCH=%%C"
+)
+SET "VERSION=%VERSION_MAJOR%.%VERSION_MINOR%.%VERSION_PATCH%"
+
+CALL :SubGetVersion
+
+SETLOCAL EnableDelayedExpansion
+FOR /F "tokens=*" %%A IN ('FINDSTR /R /C:"define MPC_VERSION_MAJOR" "include\version.h"') DO (
+  SET LINE_ORG=%%A
+  SET LINE_SUB=!LINE_ORG:%MPC_VERSION_MAJOR%=%VERSION_MAJOR%!
+  CALL :SubReplaceInFile "!LINE_ORG!" "!LINE_SUB!" "include\version.h"
+)
+
+FOR /F "tokens=*" %%A IN ('FINDSTR /R /C:"define MPC_VERSION_MINOR" "include\version.h"') DO (
+  SET LINE_ORG=%%A
+  SET LINE_SUB=!LINE_ORG:%MPC_VERSION_MINOR%=%VERSION_MINOR%!
+  CALL :SubReplaceInFile "!LINE_ORG!" "!LINE_SUB!" "include\version.h"
+)
+
+FOR /F "tokens=*" %%A IN ('FINDSTR /R /C:"define MPC_VERSION_PATCH" "include\version.h"') DO (
+  SET LINE_ORG=%%A
+  SET LINE_SUB=!LINE_ORG:%MPC_VERSION_PATCH%=%VERSION_PATCH%!
+  CALL :SubReplaceInFile "!LINE_ORG!" "!LINE_SUB!" "include\version.h"
+)
+
+ENDLOCAL
+EXIT /B
+
+
+:SubReplaceInFile
+SET "FILE=%~3"
+SET "FILE_NEW=%~3_new"
+
+SET "ORG=%~1"
+SET "SUB=%~2"
+IF DEFINED ORG SET "ORG=%ORG:""="%"
+IF DEFINED SUB SET "SUB=%SUB:""="%"
+
+SETLOCAL DisableDelayedExpansion
+IF "%~1"=="" FINDSTR "^::" "%~f0" & ENDLOCAL & EXIT /B
+FOR /F "delims=" %%A IN ('"FINDSTR /n ^^ %FILE%"') DO (
+  SET "LINE=%%A"
+  SETLOCAL EnableDelayedExpansion
+  SET "LINE=!LINE:*:=!"
+  IF DEFINED LINE (
+    SET "LINE=!LINE:%ORG%=%SUB%!"
+    (ECHO(!LINE!)>> %FILE_NEW%
+  ) ELSE ECHO(>> %FILE_NEW%
+  ENDLOCAL
+)
+
+MOVE %FILE_NEW% %FILE% > NUL
+ENDLOCAL
 EXIT /B
 
 
