@@ -40,7 +40,7 @@
 #include "WebServer.h"
 #include "WinAPIUtils.h"
 #include "mpc-hc_config.h"
-#include "winddk/ntddcdvd.h"
+#include <ntddcdvd.h>
 #include <afxsock.h>
 #include <atlsync.h>
 #include <winternl.h>

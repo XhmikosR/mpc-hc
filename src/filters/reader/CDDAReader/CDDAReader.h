@@ -1,6 +1,6 @@
 /*
  * (C) 2003-2006 Gabest
- * (C) 2006-2015 see Authors.txt
+ * (C) 2006-2015, 2017 see Authors.txt
  *
  * This file is part of MPC-HC.
  *
@@ -23,8 +23,8 @@
 
 #include <vector>
 #include <atlbase.h>
-#include "winddk/devioctl.h"
-#include "winddk/ntddcdrm.h"
+#include <devioctl.h>
+#include <ntddcdrm.h>
 #include <qnetwork.h>
 #include "AsyncReader/asyncio.h"
 #include "AsyncReader/asyncrdr.h"
